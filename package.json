@@ -1,0 +1,28 @@
+{
+  "name": "volos-swagger-oauth",
+  "version": "0.0.1",
+  "description": "A swagger-node fitting for volos oauth",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/apigee-127/volos-swagger-oauth.git"
+  },
+  "keywords": [
+    "swagger",
+    "volos",
+    "oauth"
+  ],
+  "author": "Scott Ganyo <sganyo@apigee.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/apigee-127/volos-swagger-oauth/issues"
+  },
+  "homepage": "https://github.com/apigee-127/volos-swagger-oauth#readme",
+  "dependencies": {
+    "lodash": "^3.10.1",
+    "volos-swagger": "^0.7.8"
+  }
+}
