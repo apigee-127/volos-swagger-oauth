@@ -11,6 +11,7 @@ More information on Volos here: https://github.com/apigee-127/volos
 
 More information on applying OAuth policies here: https://github.com/apigee-127/a127-documentation/wiki/Policies#oauth
 
+Example app here: https://github.com/apigee-127/swagger-node-examples/tree/master/volos-plugins
 
 Installation
 ------------
