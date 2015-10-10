@@ -22,7 +22,19 @@ npm install --save volos-swagger-oauth
 npm install --save volos-oauth-apigee
 ```
 
-2. Add the volos_oauth fitting to your pipe (config/default.yaml). It should be run just before the swagger_security module:
+2. Add a `volos-swagger-oauth` fitting definition to your bagpipes definition (config/default.yaml). It *must* be declared before the `swagger_router` (defining at the top of the `bagpipes` section is safe):
+
+```yaml
+  bagpipes:
+
+    volos-swagger-oauth:                # <= DEFINED HERE
+      name: volos-swagger-oauth
+
+    _router:
+      name: swagger_router
+```
+
+3. Add the volos-swagger-oauth fitting to any pipe on which you need security to be included. It should be inserted above the swagger_security module:
 
 ```yaml
     swagger_controllers:
@@ -35,27 +47,44 @@ npm install --save volos-oauth-apigee
       - _router
 ```
 
-3. Add a [Swagger 2.0 Spec](http://swagger.io/specification/) [security Definitions](http://swagger.io/specification/#securityDefinitionsObject) tag to your Swagger:
+4. Add a [Swagger 2.0 Spec](http://swagger.io/specification/) [security Definitions](http://swagger.io/specification/#securityDefinitionsObject) tag to your Swagger. Something like this:
 
 ```yaml
 securityDefinitions:
-  MyApiKey:
-    type: apiKey
-    name: apiKey
-    in: query
+  OAuth2:
+    type: oauth2
+    flow: application
+    tokenUrl: http://localhost:10010/accesstoken
+    scopes:
+      read: read access
 ```
 
-4. Add the x-volos-resources extension tag to your Swagger with your policy configuration. Note that the key string (MyApiKey) must match the name used in the securityDefinitions:
+4. Add a `x-volos-resources` extension tag to your Swagger with your policy configuration (see the [volos-swagger readme](https://github.com/apigee-127/volos/tree/master/swagger) for more details. This will configure the Volos OAuth provider. Note that the key ('OAuth2' in this example) must match the name used in the securityDefinitions:
 
 ```yaml
-  MyApiKey:
+x-volos-resources:
+  OAuth2:
     provider: volos-oauth-apigee
     options:
+      tokenLifetime: 300000
       key: *apigeeProxyKey
       uri: *apigeeProxyUri
+      validGrantTypes:
+        - client_credentials
+        - authorization_code
+        - implicit_grant
+        - password
+      passwordCheck:
+        helper: volos
+        function: passwordCheck
+      tokenPaths:  # These will be added to your paths section for you
+        authorize: /authorize
+        token: /accesstoken
+        invalidate: /invalidate
+        refresh: /refresh
 ```
 
-4. Add the Swagger 2.0 [security](http://swagger.io/specification/#securityRequirementObject) tag to any paths or operations on your Swagger you would like your security policy to apply to along with any configuration that is necessary:
+4. Add the [Swagger 2.0 security](http://swagger.io/specification/#securityRequirementObject) tag to any paths or operations on your Swagger you would like your security policy to apply to along with any configuration that is necessary:
 
 ```yaml
 paths:
@@ -66,5 +95,5 @@ paths:
       operationId: hello
       parameters: []
       security:
-        - MyOAuth: [ read ]
+        - OAuth2: [ read ]
 ```

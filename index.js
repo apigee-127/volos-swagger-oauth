@@ -15,7 +15,13 @@ module.exports = function create(fittingDef, bagpipes) {
 
   // install security handlers (won't overwrite existing ones)
   if (middleware.swaggerSecurityHandlers) {
+    swaggerNodeRunner.swaggerSecurityHandlers = swaggerNodeRunner.swaggerSecurityHandlers || {};
     _.defaults(swaggerNodeRunner.swaggerSecurityHandlers, middleware.swaggerSecurityHandlers);
+
+    function swaggerRouterDetector(ea) { return ea.name === 'swagger_router' }
+
+    var swaggerRouterDef = _.find(swaggerNodeRunner.config.swagger.bagpipes, swaggerRouterDetector);
+    swaggerRouterDef.controllersDirs.push(middleware.controllers);
   }
 
   return function volos_auth(context, cb) {
