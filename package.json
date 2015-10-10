@@ -1,6 +1,6 @@
 {
   "name": "volos-swagger-oauth",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A swagger-node fitting for volos oauth",
   "main": "index.js",
   "scripts": {
