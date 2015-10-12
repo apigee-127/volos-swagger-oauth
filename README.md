@@ -16,14 +16,21 @@ Example app here: https://github.com/apigee-127/swagger-node-examples/tree/maste
 Installation
 ------------
 
-1. Add this and the volos modules you plan use to your application dependencies. Example:
+1) Add the volos-swagger-apply module to your fittings directory. The easiest way to do this presently is to use `npm install` to install the module (to node_modules) and then move it to your fittings directory. For example, assuming you are in your main project directory, you can perform the following steps:
 
 ```
 npm install --save volos-swagger-oauth
+mkdir api/fittings
+mv node_modules/volos-swagger-apply api/fittings
+```
+
+2) Add the volos modules you plan use to your application dependencies. We'll be setting an in-memory quota, so we'll add the volos-quota-memory module to our dependencies. Example:
+
+```
 npm install --save volos-oauth-apigee
 ```
 
-2. Add a `volos-swagger-oauth` fitting definition to your bagpipes definition (config/default.yaml). It *must* be declared before the `swagger_router` (defining at the top of the `bagpipes` section is safe):
+3) Add a `volos-swagger-oauth` fitting definition to your bagpipes definition (config/default.yaml). It *must* be declared before the `swagger_router` (defining at the top of the `bagpipes` section is safe):
 
 ```yaml
   bagpipes:
@@ -35,7 +42,7 @@ npm install --save volos-oauth-apigee
       name: swagger_router
 ```
 
-3. Add the volos-swagger-oauth fitting to any pipe on which you need security to be included. It should be inserted above the swagger_security module:
+4) Add the volos-swagger-oauth fitting to any pipe on which you need security to be included. It should be inserted above the swagger_security module:
 
 ```yaml
     swagger_controllers:
@@ -48,7 +55,7 @@ npm install --save volos-oauth-apigee
       - _router
 ```
 
-4. Add a [Swagger 2.0 Spec](http://swagger.io/specification/) [security Definitions](http://swagger.io/specification/#securityDefinitionsObject) tag to your Swagger. Something like this:
+5) Add a [Swagger 2.0 Spec](http://swagger.io/specification/) [security Definitions](http://swagger.io/specification/#securityDefinitionsObject) tag to your Swagger. Something like this:
 
 ```yaml
 securityDefinitions:
@@ -60,7 +67,7 @@ securityDefinitions:
       read: read access
 ```
 
-4. Add a `x-volos-resources` extension tag to your Swagger with your policy configuration (see the [volos-swagger readme](https://github.com/apigee-127/volos/tree/master/swagger) for more details. This will configure the Volos OAuth provider. Note that the key ('OAuth2' in this example) must match the name used in the securityDefinitions:
+6) Add a `x-volos-resources` extension tag to your Swagger with your policy configuration (see the [volos-swagger readme](https://github.com/apigee-127/volos/tree/master/swagger) for more details. This will configure the Volos OAuth provider. Note that the key ('OAuth2' in this example) must match the name used in the securityDefinitions:
 
 ```yaml
 x-volos-resources:
@@ -85,7 +92,7 @@ x-volos-resources:
         refresh: /refresh
 ```
 
-4. Add the [Swagger 2.0 security](http://swagger.io/specification/#securityRequirementObject) tag to any paths or operations on your Swagger you would like your security policy to apply to along with any configuration that is necessary:
+7) Add the [Swagger 2.0 security](http://swagger.io/specification/#securityRequirementObject) tag to any paths or operations on your Swagger you would like your security policy to apply to along with any configuration that is necessary:
 
 ```yaml
 paths:
